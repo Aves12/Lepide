@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+  backend:
+    build: ./backend
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./backend:/app
+    depends_on:
+      - llm
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./frontend:/app
+
+  llm:
+    image: pytorch/pytorch:1.9.0-cuda10.2-cudnn7-runtime
+    volumes:
+      - ./llm:/app
+    working_dir: /app
+    command: python -m http.server 8000
+    ports:
+      - "8000:8000"
